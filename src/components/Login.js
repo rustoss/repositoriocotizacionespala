@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import {Avatar, Button, CssBaseline, TextField, FormControlLabel} from '@material-ui/core';
 import {Checkbox, Link, Grid, Box, Typography, makeStyles, Container} from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import axios from 'axios'
+import jwt_decode from 'jwt-decode'
 import Error from './Error'
 import Copyright from './Copyright'
-
+import {ComponenteContext} from '../context/ComponenteContext'
+import {guardarLS} from '../funciones/guardarLS'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -26,7 +29,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Login = ({ guardarNumeroComponente }) => {
+const Login = ({ }) => {
+
+    const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)    
+
+    //console.log(`nivel acceso: ${nivel_acceso} y numero ventana: ${numero_ventana}`);
 
     const [ datoslogeo, guardarDatosLogeo] = useState({
         email: '',
@@ -58,13 +65,69 @@ const Login = ({ guardarNumeroComponente }) => {
     // }
     const consultarAPI = async () => {
         try{
-            /*const consulta = await Axios.post('http://localhost:5000/api/auth', {
-                email: email,
+            const consulta = await axios.post('https://apicotizacion.herokuapp.com/api/autorizacion', {
+                correo: email,
                 password: password
-            })*/                        
-            guardarNumeroComponente(1)           
+            })
+                               
+
+            const decoded = jwt_decode(consulta.data.jwToken);
+           
+            localStorage.setItem('jwt', JSON.stringify(consulta.data.jwToken))
+            let nivelAcceso = 1
+            console.log(decoded);
+            
+            if (decoded.nivel_acceso === 0){
+                nivelAcceso = 0
+                /*
+
+
+                guardarNivelAcceso(0)
+
+
+                */
+                const objeto = {
+                    nivel_acceso: nivelAcceso,
+                    numero_componente: 1,
+                    numero_ventana: 1
+                }
+                localStorage.setItem('componente', JSON.stringify(objeto))
+            }else if (decoded.nivel_acceso === 1 ){
+                nivelAcceso = 1
+                const objeto = {
+                    nivel_acceso: nivelAcceso,
+                    numero_componente: 1,
+                    numero_ventana: 1
+                }
+                localStorage.setItem('componente', JSON.stringify(objeto))
+                /*
+
+
+
+                guardarNivelAcceso(0)
+
+
+                */
+            }else{
+                alert("no se ha podido acceder")
+            }
+            guardarComponenteContx({
+                nivel_acceso: nivelAcceso,
+                numero_ventana: 1,
+                numero_componente: 1
+            })
+            /*
+
+
+
+
+            guardarNumeroComponente(1)
+
+
+
+            */
         }
-        catch{
+        catch{            
             guardarError(true)            
         }
       
@@ -82,7 +145,23 @@ const Login = ({ guardarNumeroComponente }) => {
     }
 
     const registarse = () => {
+
+        guardarLS(null, null, 2)
+        guardarComponenteContx({
+            ...componentecontx,
+            numero_ventana: 2
+        })
+
+        /*
+
+
+
+
         guardarNumeroComponente(2)
+
+
+
+        */
     }
 
     const classes = useStyles();
@@ -126,11 +205,7 @@ const Login = ({ guardarNumeroComponente }) => {
                     autoComplete="current-password"
                     value={password}
                     onChange={changeSubmit}
-                />
-                <FormControlLabel
-                    control={<Checkbox value="remember" color="primary" />}
-                    label="Recordar"
-                />
+                />                
                 <Button
                     type="submit"
                     fullWidth

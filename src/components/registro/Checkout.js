@@ -1,14 +1,15 @@
-import { Fragment, useState, useEffect } from 'react';
-import { makeStyles, CssBaseline, Paper, Stepper, Step, StepLabel, Typography } from '@material-ui/core';
+import { Fragment, useState, useEffect, useContext } from 'react';
+import { IconButton, makeStyles, CssBaseline, Grid, Paper, Stepper, Step, StepLabel, Typography } from '@material-ui/core';
+import {Cancel} from '@material-ui/icons';
 import Axios from 'axios'
 import DatosFiscales from './DatosFiscales';
 import DatosBancarios from './DatosBancarios';
 import DatosPersonales from './DatosPersonales';
 import Botones from './Botones'
-import Error from './Error'
-import Copyright from './Copyright'
+import Error from '../Error'
+import Copyright from '../Copyright'
 import Resumen from './Resumen'
-import Modal from './Modal'
+import Modal from '../Modal'
 import {
   validarVaciosDatosFiscales,
   validarVaciosDatosPersonales,
@@ -16,7 +17,9 @@ import {
   verificarFormatoDatosFiscales,
   verificarFormatoDatosPersonales,
   verificarFormatoDatosBancarios
-} from '../funciones/validarDatos'
+} from '../../funciones/validarDatos'
+import {guardarLS} from '../../funciones/guardarLS'
+import {ComponenteContext} from '../../context/ComponenteContext'
 
 const useStyles = makeStyles((theme) => ({
   layout: {
@@ -41,21 +44,29 @@ const useStyles = makeStyles((theme) => ({
   },
   stepper: {
     padding: theme.spacing(3, 0, 5),
-  }
+  },
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+      marginRight: 0
+    },
+  },
+  input: {
+    display: 'none',
+  },
 }));
 
 const steps = ['Datos Fiscales', 'Datos Personales', 'Datos Bancarios', 'Resumen'];
 
-export default function Checkout({ guardarNumeroComponente }) {    
+export default function Checkout({ }) {    
   const classes = useStyles();
 
+  const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
   const [ activeStep, setActiveStep ] = useState(0);
-
   const [ error, guardarError ] = useState({
     bandError: false,
     mensajeError: ''
   })
-  
   const [ erroresdatos, guardarErroresDatos ] = useState({
     errorRfc: false,
     errorCp: false,
@@ -69,11 +80,8 @@ export default function Checkout({ guardarNumeroComponente }) {
     errorNumeroClave: false,
     errorCuenta: false
   })  
-  
   const [ banddatosapi, guardarBandDatosApi ] = useState(false)
-  
   const [openmodal, setOpenModal] = useState(false);
-
   const [ datos, guardarDatos ] = useState({
     nombreMoralFisica: '',
     rfc: '',
@@ -95,6 +103,7 @@ export default function Checkout({ guardarNumeroComponente }) {
     razonSocial: ''
   })
 
+  // Destructuring
   const { 
     errorRfc,
     errorCp,
@@ -108,7 +117,6 @@ export default function Checkout({ guardarNumeroComponente }) {
     errorNumeroClave,
     errorCuenta
   } = erroresdatos
-
   const { bandError, mensajeError } = error
 
   const funcGuardarError = (band, mensaje) => {
@@ -127,35 +135,52 @@ export default function Checkout({ guardarNumeroComponente }) {
         const { correo, password, nombreContacto, telefonoFijo, telefonoMovil} = datos        
         const { numeroClave, cuenta, razonSocial } = datos
         
-        const resultado = await Axios.post('https://apicotizacion.herokuapp.com/api/proveedores', {
-          nombre_empresa: nombreMoralFisica,
-          rfc: rfc,
-          direccion_fiscal: direccionFiscal,
-          direccion_oficina: direccionOficina,
-          calle_referencia1: calleReferencia1,
-          calle_referencia2: calleReferencia2,
-          codigo_postal: cp,
-          colonia: colonia,
-          ciudad: ciudad,
-          estado: estado,
-          correo: correo,
-          nombre: nombreContacto,   
-          telefono_fijo: telefonoFijo,
-          telefono_movil: telefonoMovil,
-          numero_clave: numeroClave,
-          cuenta: cuenta,
-          razon_social: razonSocial,
-          password: password
-        })
+        try{
+          const resultado = await Axios.post('https://apicotizacion.herokuapp.com/api/proveedores', {
+            "nombre_prov": nombreMoralFisica,
+            "rfc_prov": rfc,
+            "direccion_fiscal_prov": direccionFiscal,
+            "direccion_oficina_prov": direccionOficina,
+            "calle_referencia1_prov": calleReferencia1,
+            "calle_referencia2_prov": calleReferencia2,
+            "codigo_postal_prov": cp,
+            "colonia_prov": colonia,
+            "ciudad_prov": ciudad,
+            "estado_prov": estado,
+            "correo_prov": correo,
+            "nombre_contacto_prov": nombreContacto,   
+            "telefono_fijo_prov": telefonoFijo,
+            "telefono_movil_prov": telefonoMovil,
+            "numero_clave_prov": numeroClave,
+            "cuenta_prov": cuenta,
+            "razon_social_prov": razonSocial,
+            "password_prov": password
+          })
+          guardarLS(1, 1, 1)
+          guardarComponenteContx({
+            numero_componente: 1,
+            numero_ventana: 1,
+            nivel_acceso: 1,
+          })
+          /*
 
-        let bandera = resultado.data.Error
 
-        if(bandera === undefined){
-          guardarNumeroComponente(1)
-        }else{
+
+
+
+
+          //guardarNumeroComponente(1)  
+
+
+
+
+
+
+          */        
+        }catch{
           guardarBandDatosApi(false)
-          alert(bandera)
-        }
+          alert("El correo ya ha sido registrado")
+        }        
       }
     }
     consultarAPI()
@@ -245,13 +270,29 @@ export default function Checkout({ guardarNumeroComponente }) {
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
- 
+
+  const cancel = () => {
+    guardarLS(null, null, 0)
+    guardarComponenteContx({
+      numero_componente: null,
+      numero_ventana: 0,
+      nivel_acceso: null,
+    })
+  }
   
   return (
     <Fragment>
       <CssBaseline />      
       <main className={classes.layout}>
         <Paper className={classes.paper}>
+        <Grid container justify="flex-end">
+          <input className={classes.input} id="cancel" type="button" onClick={cancel} />
+          <label htmlFor="cancel">
+            <IconButton color="secondary" aria-label="cancel" component="span">
+              <Cancel />
+            </IconButton>
+          </label>
+          </Grid>
           <Typography component="h1" variant="h4" align="center">
             Registro de Proveedores
           </Typography>

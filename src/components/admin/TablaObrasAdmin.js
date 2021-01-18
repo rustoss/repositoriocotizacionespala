@@ -1,33 +1,5 @@
 import { useState } from 'react';
-import { makeStyles } from '@material-ui/core/';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import { Button, Input } from '@material-ui/core';
-
-
-
-/*
-const rows = [
-  createData('01010001', 'cemento', 'cemento PVC', 'Cemento para PVC sanitario lata de 480 ml, marca Amanco', 'pza', 2, 'que sea todo chido'), 
-  createData('01010001', 'cemento', 'cemento PVC', 'Cemento para PVC sanitario lata de 480 ml, marca Amanco', 'pza', 2, 'que sea todo chido'),
-  createData('01010001', 'cemento', 'cemento PVC', 'Cemento para PVC sanitario lata de 480 ml, marca Amanco', 'pza', 2, 'que sea todo chido'),
-  createData('01010001', 'cemento', 'cemento PVC', 'Cemento para PVC sanitario lata de 480 ml, marca Amanco', 'pza', 2, 'que sea todo chido'),
-  createData('01010001', 'cemento', 'cemento PVC', 'Cemento para PVC sanitario lata de 480 ml, marca Amanco', 'pza', 2, 'que sea todo chido'),
-  createData('01010001', 'cemento', 'cemento PVC', 'Cemento para PVC sanitario lata de 480 ml, marca Amanco', 'pza', 2, 'que sea todo chido'),
-  createData('01010001', 'cemento', 'cemento PVC', 'Cemento para PVC sanitario lata de 480 ml, marca Amanco', 'pza', 2, 'que sea todo chido'),
-  createData('01010001', 'cemento', 'cemento PVC', 'Cemento para PVC sanitario lata de 480 ml, marca Amanco', 'pza', 2, 'que sea todo chido'),
-  createData('01010001', 'cemento', 'cemento PVC', 'Cemento para PVC sanitario lata de 480 ml, marca Amanco', 'pza', 2, 'que sea todo chido'),
-  createData('01010001', 'cemento', 'cemento PVC', 'Cemento para PVC sanitario lata de 480 ml, marca Amanco', 'pza', 2, 'que sea todo chido'),
-  createData('01010001', 'cemento', 'cemento PVC', 'Cemento para PVC sanitario lata de 480 ml, marca Amanco', 'pza', 2, 'que sea todo chido'),
-  createData('01010001', 'cemento', 'cemento PVC', 'Cemento para PVC sanitario lata de 480 ml, marca Amanco', 'pza', 2, 'que sea todo chido'),
-];
-*/
+import { makeStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@material-ui/core/';
 
 const useStyles = makeStyles({
   root: {
@@ -92,10 +64,6 @@ export default function TablaObrasAdmin({ rows, guardarRows }) {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  //const rows = []
-  //{ folioItem: 'sdfd', categoria: 'dsfds', subcategoria: 'fdsf', producto: 'sdf', unidad: 'dsfdsf', requerido: 'dsfsdf', anotaciones: 'dsf' }
-  
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

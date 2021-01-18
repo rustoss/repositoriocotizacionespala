@@ -1,38 +1,42 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useContext } from 'react';
 import Login from './components/Login'
-import Checkout from './components/Checkout'
-import ObrasAdmin from './components/ObrasAdmin'
+import Checkout from './components/registro/Checkout'
+import Dashboard from './components/Dashboard'
+import {ComponenteContext} from './context/ComponenteContext'
 
 function App() {
 
-  const [ numerocomponente, guardarNumeroComponente ] = useState(0)
+  const { componentecontx } = useContext(ComponenteContext)
+
+  const { numero_ventana } = componentecontx  
+  //console.log(componentecontx);
+
+  //const [ numerocomponente, guardarNumeroComponente ] = useState(0)
+  //const [ nivelacceso, guardarNivelAcceso ] = useState(0)
 
   const pagina = () => {
-    switch (numerocomponente) {
+    switch (numero_ventana) {
       case 0:
-        return <Login
-          guardarNumeroComponente={guardarNumeroComponente}
-        />
+        return <Login/>
       case 1:
-        return <ObrasAdmin
+        return <Dashboard/>
+        /*return <CrearObraAdmin
           guardarNumeroComponente={guardarNumeroComponente}
-        />
+        />*/
       case 2:
-        return <Checkout
-          guardarNumeroComponente={guardarNumeroComponente}
-        />
+        return <Checkout/>
       case 3:
         return 'obra registrada'
       default:
         throw new Error('Unknown step')
     }
   }
-  return (
-    <Fragment>
-      {
-        pagina()
-      }
-    </Fragment>
+  return (    
+      <Fragment>
+        {
+          pagina()
+        }
+      </Fragment>    
   )
 }
 
