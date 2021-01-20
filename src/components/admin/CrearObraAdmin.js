@@ -103,6 +103,7 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
             producto: '',
             unidad: ''
         })       
+        //eslint-disable-next-line
     }, [categoria])
 
     useEffect(() => {
@@ -114,6 +115,7 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
             producto: '',
             unidad: ''
         })
+        //eslint-disable-next-line
     }, [subcategoria])
 
     useEffect(() => {
@@ -124,6 +126,7 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
                unidad: e.unidades,
                folioItem: e.folio
             })))
+        //eslint-disable-next-line
     }, [producto])
 
     useEffect(() => {
@@ -159,6 +162,7 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
         if(banddatosapi && rows.length > 0){
             consultarAPI()
         }
+        //eslint-disable-next-line
     }, [banddatosapi])
 
       

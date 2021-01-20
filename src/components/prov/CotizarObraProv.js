@@ -80,7 +80,7 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
             guardarCategorias(res)
         }
         consultarAPI()
-        
+        //eslint-disable-next-line
     }, [])
 
     useEffect(() => {
@@ -105,7 +105,7 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
                 eliminar: ''
             })        
         }catch{}
-        
+        //eslint-disable-next-line
     }, [categoria])
 
     useEffect(() => {
@@ -123,6 +123,7 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
                 eliminar: ''
             })
         }catch{}
+        //eslint-disable-next-line
     }, [subcategoria])
 
     useEffect(() => {
@@ -138,6 +139,7 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
                 requeridos: e.requeridos
                 })))
         }catch{}
+        //eslint-disable-next-line
     }, [producto])
 
     useEffect(() => {
@@ -186,6 +188,7 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
         if(banddatosapi && rows.length > 0){
             consultarAPI()
         }
+        //eslint-disable-next-line
     }, [banddatosapi])
 
     const registrar = () => {

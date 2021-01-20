@@ -1,7 +1,8 @@
-import { Fragment, useState, useContext } from 'react';
+import { Fragment, useContext } from 'react';
 import { Card, Container, CardActions, CardContent, Grid, Typography, makeStyles }  from '@material-ui/core/';
 import {Pagination} from '@material-ui/lab/';
 import {ComponenteContext} from '../context/ComponenteContext'
+import {createPDF} from '../libs/createPdf'
 
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
@@ -21,11 +22,25 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(2),
     },
   },
+  btn:{
+    background: '#3f50b5',
+    border: 0,
+    borderRadius: 6,
+    color: 'white',
+    height: 30,
+    width: '100%',
+    cursor: 'pointer',
+    fontWeight: 600,
+
+    '&:hover': {
+        background: 'linear-gradient(45deg, #1e88e5 50%, #00b0ff 100%)',
+     },
+  },
 }));
 
 
 
-const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas, paginaactual, paginafinal, guardarPaginaFinal, page, setPage, guardarPaginaActual, obrastotal, guardarObra}) => {
+const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas, paginaactual, paginafinal, guardarPaginaFinal, page, setPage, guardarPaginaActual, obrastotal, obrascotizadas, guardarObra, bandObrasCotizadas, seleccionpor }) => {
 
 
     const classes = useStyles();
@@ -34,7 +49,7 @@ const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas, pagin
     
     const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
 
-    
+    const { nivel_acceso } = componentecontx
 
     const handleChange = (event, value) => {
       setPage(value);    
@@ -42,16 +57,26 @@ const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas, pagin
       guardarPaginaFinal(cantidadcards*value) 
     };
 
-    const seleccionarObra = e => {
-        const obraSeleccionada = obrastotal.filter(row => row.folio_obra === e.target.id)        
+    const seleccionarObra = e => {      
+      if(nivel_acceso === 1 && siguientecomponente === 4 ){
+        createPDF()
+      }else{
+        let obraSeleccionada = []        
       
+        if (seleccionpor === "obra" ){
+          obraSeleccionada = obrastotal.filter(row => row.folio_obra === e.target.id)
+        }else{          
+          obraSeleccionada = obrastotal.filter(row => row.folio_cotizacion === e.target.id)
+        }
         const obra = obraSeleccionada[0]        
-     
+        
         guardarObra(obra)
         guardarComponenteContx({
           ...componentecontx,
           numero_componente: siguientecomponente
         })
+      }
+        
         /*
 
 
@@ -60,8 +85,6 @@ const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas, pagin
           ...componente,
           numero_componente: 3
         })
-
-
 
 
 
@@ -81,9 +104,15 @@ const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas, pagin
                         <Typography gutterBottom variant="h5" component="h2">
                           Folio Obra: {row.folioObra}
                         </Typography>
-                        <Typography gutterBottom variant="h6" component="h2">
-                          Folio Cotizacion: {row.folioObra}
-                        </Typography>
+                        {
+                          bandObrasCotizadas
+                          ?
+                          <Typography gutterBottom variant="h6" component="h2">
+                            Folio Cotizacion: {row.folioCotizacion}
+                          </Typography>
+                          : 
+                          null
+                        }
                         <Typography>
                         {row.nombreObra}
                         </Typography>
@@ -92,9 +121,10 @@ const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas, pagin
                         <CardActions>
                         <input
                             type='button'
-                            id={row.folioObra}
+                            id={ seleccionpor === "obra" ? row.folioObra : row.folioCotizacion}
                             value="Seleccionar"
                             onClick={seleccionarObra}
+                            className={classes.btn}
                         />
                     </CardActions>
                     </Card>

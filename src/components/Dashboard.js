@@ -2,21 +2,21 @@ import { useState, useContext, useEffect } from 'react';
 import clsx from 'clsx';
 import jwt_decode from 'jwt-decode'
 import axios from 'axios'
-import { guardarLS } from '../funciones/guardarLS'
-import { makeStyles, CssBaseline, Drawer, AppBar, Toolbar, List } from '@material-ui/core';
+import { guardarLS } from '../libs/guardarLS'
+import { makeStyles, Avatar, CssBaseline, Drawer, AppBar, Toolbar, List } from '@material-ui/core';
 import { Typography, Divider, IconButton, Badge } from '@material-ui/core/';
-import { Menu, ChevronLeft, Person } from '@material-ui/icons';
+import { Menu, ChevronLeft, ExitToApp } from '@material-ui/icons';
 
 import ListItemsAdmin from './admin/ListItemsAdmin';
 import PerfilAdmin from './admin/PerfilAdmin'
 import CrearObraAdmin from './admin/CrearObraAdmin'
-import ObrasCreadasAdmin from './admin/ObrasCreadasAdmin'
+//import ObrasCreadasAdmin from './admin/ObrasCreadasAdmin'
 import DetalleObraAdmin from './admin/DetalleObraAdmin'
 
 import ListItemsProv from './prov/ListItemsProv'
 import PerfilProv from './prov/PerfilProv'
-import ObrasDisponiblesProv from './prov/ObrasDisponiblesProv'
-import ObrasCotizadasProv from './prov/ObrasCotizadasProv'
+// import ObrasDisponiblesProv from './prov/ObrasDisponiblesProv'
+// import ObrasCotizadasProv from './prov/ObrasCotizadasProv'
 import CotizarObraProv from './prov/CotizarObraProv'
 import DetalleObraCotizadaProv from './prov/DetalleObraCotizadaProv'
 
@@ -48,6 +48,8 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
+    background: '#cddc39',
+    color: 'black'
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -59,12 +61,15 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: 36,
+    
   },
   menuButtonHidden: {
     display: 'none',
+    
   },
   title: {
     flexGrow: 1,
+    
   },
   drawerPaper: {
     position: 'relative',
@@ -103,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard({  }) {
+export default function Dashboard() {
   
   const resultado = JSON.parse(localStorage.getItem('jwt'))
   const decoded = jwt_decode(resultado)
@@ -136,45 +141,61 @@ export default function Dashboard({  }) {
   
   const [ obrasdisponibles, guardarObrasDisponibles ] = useState([])
   const [ obrascotizadas, guardarObrasCotizadas ] = useState([])
+  const [ obrastotales, guardarObrasTotales ] = useState([])
   const [ rowsobrasdisponibles, guardarRowsObrasDisponibles ] = useState([])
   const [ rowsobrascotizadas, guardarRowsObrasCotizadas ] = useState([])
+  const [ rowsobrastotales, guardarRowsObrasTotales ] = useState([])
   const [ actualizarcards, guardarActualizarCards ] = useState(0)
   const [ paginaactual, guardarPaginaActual ] = useState(0)
   const [ page, setPage ] = useState(1);    
-  const [ cantidadcards, guardarCantidadCards ] = useState(10)
+  const [ cantidadcards, guardarCantidadCards ] = useState(12)
   const [ paginafinal, guardarPaginaFinal ] = useState(cantidadcards)
-  
+  const [tipobusqueda, guardarTipoBusqueda] = useState('Buscar por Folio Obra')
+
 
   useEffect(() => {
     
     const consultarAPI = async () => {
-      const respObrasDisp = await axios.get('https://apicotizacion.herokuapp.com/api/obras')
-      const respObrasCoti = await axios.get(`https://apicotizacion.herokuapp.com/api/cotizaciones/cotizadas/${decoded.correo}`)
-      const obrasDisp = respObrasDisp.data.Obras.map(obra => (
-        {
-          folioObra: obra.folio_obra,
-          nombreObra: obra.nombre_obra                    
-        }
-      ))
-      const obrasCoti = respObrasCoti.data.Obras.map(obra => (
-        {
-          folioObra: obra.folio_obra,
-          folioCotizacion: obra.folio_cotizacion,
-          nombreObra: obra.nombre_obra,                   
-        }
-      ))
-      guardarObrasDisponibles(respObrasDisp.data.Obras)
-      guardarObrasCotizadas(respObrasCoti.data.Obras)
-      guardarRowsObrasDisponibles(obrasDisp)
-      guardarRowsObrasCotizadas(obrasCoti)
+      if( nivel_acceso === 0){        
+        const respObrasTotales = await axios.get('https://apicotizacion.herokuapp.com/api/obras')
+        const obrasTotales = respObrasTotales.data.Obras.map(obra => (
+          {
+            folioObra: obra.folio_obra,
+            nombreObra: obra.nombre_obra                    
+          }
+        ))
+        guardarObrasTotales(respObrasTotales.data.Obras)
+        guardarRowsObrasTotales(obrasTotales)
+      }else if (nivel_acceso === 1){
+        const respObrasDisp = await axios.get('https://apicotizacion.herokuapp.com/api/obras/vigentes')
+        const respObrasCoti = await axios.get(`https://apicotizacion.herokuapp.com/api/cotizaciones/cotizadas/${decoded.correo}`)
+        const obrasDisp = respObrasDisp.data.Obras.map(obra => (
+          {
+            folioObra: obra.folio_obra,
+            nombreObra: obra.nombre_obra                    
+          }
+        ))
+        const obrasCoti = respObrasCoti.data.Obras.map(obra => (
+          {
+            folioObra: obra.folio_obra,
+            folioCotizacion: obra.folio_cotizacion,
+            nombreObra: obra.nombre_obra,                   
+          }
+        ))
+        guardarObrasDisponibles(respObrasDisp.data.Obras)
+        guardarObrasCotizadas(respObrasCoti.data.Obras)
+        guardarRowsObrasDisponibles(obrasDisp)
+        guardarRowsObrasCotizadas(obrasCoti)
+      }
     }
     consultarAPI()
+    //eslint-disable-next-line
   }, [actualizarcards])
   //const [ numerocomponentedashboardadmin, guardarNumeroComponenteDashboardAdmin ] = useState(0)
   //const [ numerocomponentedashboardprov, guardarNumeroComponenteDashboardProv ] = useState(0)  
   const [ obra, guardarObra ] = useState({})
 
-  const paginaAdmin = () => {{}
+  const paginaAdmin = () => {
     if (nivel_acceso === 0 && numero_componente === 0){
       return <CrearObraAdmin
         //guardarComponente={guardarComponente}
@@ -190,10 +211,10 @@ export default function Dashboard({  }) {
         titulo={"Obras Creadas"}
         siguientecomponente={3}
         guardarObra={guardarObra}
-        rows={rowsobrasdisponibles}  
-        guardarRows={guardarRowsObrasDisponibles}      
-        obrastotal={obrasdisponibles}     
-        totalpaginas={Math.ceil(rowsobrasdisponibles.length/cantidadcards)} 
+        rows={rowsobrastotales}  
+        guardarRows={guardarRowsObrasTotales}      
+        obrastotal={obrastotales}     
+        totalpaginas={Math.ceil(rowsobrastotales.length/cantidadcards)} 
         paginaactual={paginaactual}  
         guardarPaginaActual={guardarPaginaActual}
         paginafinal={paginafinal}
@@ -201,13 +222,33 @@ export default function Dashboard({  }) {
         page={page}
         setPage={setPage}
         cantidadcards={cantidadcards}
+        bandObrasCotizadas={false}
+        tipobusqueda={tipobusqueda}
+        guardarTipoBusqueda={guardarTipoBusqueda}
+        seleccionpor={'obra'}
       />
     }else if (nivel_acceso === 0 && numero_componente === 3){
       return <DetalleObraAdmin
         obra={obra}
+        guardarObra={guardarObra}
+        rowsobrascotizadas={rowsobrascotizadas}      
+        guardarRowsObrasCotizadas={guardarRowsObrasCotizadas}        
+        obrascotizadas={obrascotizadas}
+        guardarObrasCotizadas={guardarObrasCotizadas}        
+        paginaactual={paginaactual}  
+        guardarPaginaActual={guardarPaginaActual}
+        paginafinal={paginafinal}
+        guardarPaginaFinal={guardarPaginaFinal}
+        page={page}
+        setPage={setPage}
+        cantidadcards={cantidadcards}
+        bandObrasCotizadas={true}
+        tipobusqueda={tipobusqueda}
+        guardarTipoBusqueda={guardarTipoBusqueda}
       />
-    }
-    else{
+    }else if (nivel_acceso === 0 && numero_componente === 4){
+      return `La Obra es: ${obra.folio_obra} \nLa cotizacion es: ${obra.folio_cotizacion}`
+    }else{
       return 'error 400'
     }
     /*
@@ -245,6 +286,10 @@ export default function Dashboard({  }) {
         page={page}
         setPage={setPage}
         cantidadcards={cantidadcards}
+        bandObrasCotizadas={false}
+        tipobusqueda={tipobusqueda}
+        guardarTipoBusqueda={guardarTipoBusqueda}
+        seleccionpor={'obra'}
       />
     }else if(nivel_acceso === 1 && numero_componente === 1){
       return <PerfilProv
@@ -269,6 +314,10 @@ export default function Dashboard({  }) {
         page={page}
         setPage={setPage}
         cantidadcards={cantidadcards}
+        bandObrasCotizadas={true}
+        tipobusqueda={tipobusqueda}
+        guardarTipoBusqueda={guardarTipoBusqueda}
+        seleccionpor={'obra'}
       />
     }else if(nivel_acceso === 1 && numero_componente === 3){
       return <CotizarObraProv
@@ -308,11 +357,13 @@ export default function Dashboard({  }) {
   }
 
   const salirlogin = () => {
-    guardarLS(null, null, null)
+    //guardarLS("", "", "")
+    localStorage.removeItem('jwt')
+    localStorage.removeItem('componente')
     guardarComponenteContx({
-      nivel_acceso: 0,
+      nivel_acceso: null,
       numero_ventana: 0,
-      numero_componente: 0
+      numero_componente: null
     })
     /*const objeto = {
       nivel_acceso: 0,
@@ -349,10 +400,11 @@ export default function Dashboard({  }) {
             {         
               nivel_acceso === 0 ? 'Administración' : 'Proveedor'
             }
-          </Typography>
+            
+          </Typography>          
           <IconButton color="inherit">
             <Badge olor="secondary">
-              <Person onClick={salirlogin} />
+              <ExitToApp onClick={salirlogin} />
             </Badge>
           </IconButton>
         </Toolbar>
@@ -376,8 +428,10 @@ export default function Dashboard({  }) {
           <ListItemsAdmin
             guardarPaginaActual={guardarPaginaActual}
             setPage={setPage}
-            guardarRowsObrasDisponibles={guardarRowsObrasDisponibles}      
-            obrasdisponibles={obrasdisponibles}
+            guardarRowsObrasTotales={guardarRowsObrasTotales}
+            guardarRowsObrasCotizadas={guardarRowsObrasCotizadas}     
+            obrastotales={obrastotales}            
+            guardarTipoBusqueda={guardarTipoBusqueda}
           />
           :
           <ListItemsProv
@@ -386,16 +440,10 @@ export default function Dashboard({  }) {
             obrasdisponibles={obrasdisponibles}
             guardarRowsObrasDisponibles={guardarRowsObrasDisponibles}                  
             obrascotizadas={obrascotizadas}
-            guardarRowsObrasCotizadas={guardarRowsObrasCotizadas}
+            guardarRowsObrasCotizadas={guardarRowsObrasCotizadas}            
+            guardarTipoBusqueda={guardarTipoBusqueda}
           />
         }
-        
-        <Divider />
-        <List>
-            {
-            //    secondaryListItems
-            }
-        </List>
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />        

@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { Grid, TextField } from '@material-ui/core';
-import { schema } from '../../funciones/validarDatos'
+import { schema } from '../../libs/validarDatos'
 
 
 export default function DatosPersonales({ 

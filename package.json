@@ -12,6 +12,7 @@
     "axios": "^0.21.0",
     "joi": "^17.3.0",
     "jwt-decode": "^3.1.2",
+    "pdfmake": "^0.1.70",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",

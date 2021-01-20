@@ -1,7 +1,7 @@
 import { Fragment, useState, useEffect, useContext } from 'react';
 import { IconButton, makeStyles, CssBaseline, Grid, Paper, Stepper, Step, StepLabel, Typography } from '@material-ui/core';
 import {Cancel} from '@material-ui/icons';
-import Axios from 'axios'
+import axios from 'axios'
 import DatosFiscales from './DatosFiscales';
 import DatosBancarios from './DatosBancarios';
 import DatosPersonales from './DatosPersonales';
@@ -17,8 +17,8 @@ import {
   verificarFormatoDatosFiscales,
   verificarFormatoDatosPersonales,
   verificarFormatoDatosBancarios
-} from '../../funciones/validarDatos'
-import {guardarLS} from '../../funciones/guardarLS'
+} from '../../libs/validarDatos'
+import {guardarLS} from '../../libs/guardarLS'
 import {ComponenteContext} from '../../context/ComponenteContext'
 
 const useStyles = makeStyles((theme) => ({
@@ -58,10 +58,10 @@ const useStyles = makeStyles((theme) => ({
 
 const steps = ['Datos Fiscales', 'Datos Personales', 'Datos Bancarios', 'Resumen'];
 
-export default function Checkout({ }) {    
+export default function Checkout() {    
   const classes = useStyles();
 
-  const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
+  const { guardarComponenteContx } = useContext(ComponenteContext)
   const [ activeStep, setActiveStep ] = useState(0);
   const [ error, guardarError ] = useState({
     bandError: false,
@@ -136,7 +136,7 @@ export default function Checkout({ }) {
         const { numeroClave, cuenta, razonSocial } = datos
         
         try{
-          const resultado = await Axios.post('https://apicotizacion.herokuapp.com/api/proveedores', {
+          await axios.post('https://apicotizacion.herokuapp.com/api/proveedores', {
             "nombre_prov": nombreMoralFisica,
             "rfc_prov": rfc,
             "direccion_fiscal_prov": direccionFiscal,
@@ -156,12 +156,15 @@ export default function Checkout({ }) {
             "razon_social_prov": razonSocial,
             "password_prov": password
           })
-          guardarLS(1, 1, 1)
+          console.log('1111111111111');
+          ///guardarLS(null, null, null)
+          console.log('222222');
           guardarComponenteContx({
-            numero_componente: 1,
-            numero_ventana: 1,
-            nivel_acceso: 1,
+            numero_componente: null,
+            numero_ventana: 0,
+            nivel_acceso: null,
           })
+          console.log('3333333');
           /*
 
 
@@ -184,6 +187,7 @@ export default function Checkout({ }) {
       }
     }
     consultarAPI()
+    //eslint-disable-next-line
   }, [banddatosapi])
   
 

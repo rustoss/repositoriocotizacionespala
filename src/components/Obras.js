@@ -1,9 +1,9 @@
-import { useState, useEffect, Fragment, useContext } from 'react';
-import { makeStyles, FormControl, FormLabel, Radio, RadioGroup,FormControlLabel, CssBaseline, TextField, Grid, Typography, Paper } from '@material-ui/core/';
-import axios from 'axios'
+import { useState, Fragment } from 'react';
+import { makeStyles,  CssBaseline, Typography, Paper } from '@material-ui/core/';
 import Copyright from './Copyright'
 import CardObra from './CardObra'
 import Error from './Error'
+import BuscadorObra from './BuscadorObra'
 
 const useStyles = makeStyles((theme) => ({   
    
@@ -24,46 +24,13 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const Obras = ( { titulo, siguientecomponente,paginaactual,guardarPaginaActual, paginafinal, guardarPaginaFinal,cantidadcards,page, setPage, totalpaginas, guardarObra, rows, guardarRows, obrastotal } ) => {
+const Obras = ( { titulo, siguientecomponente,paginaactual,guardarPaginaActual, paginafinal, guardarPaginaFinal,cantidadcards,page, setPage, totalpaginas, guardarObra, rows, guardarRows, obrastotal, obrascotizadas, bandObrasCotizadas, tipobusqueda, guardarTipoBusqueda, seleccionpor } ) => {
 
     const classes = useStyles();
 
     const [ folio, guardarFolio ] = useState()
     const [ errorconsulta, guardarErrorConsulta ] = useState(false)
     
-    const handleChange = e => {
-        if(e.target.value.trim() === ""){
-            const obrasCard = obrastotal.map(obra => (
-                {
-                  folioObra: obra.folio_obra,
-                  nombreObra: obra.nombre_obra                    
-                }
-            ))
-            guardarRows(obrasCard)
-        }else{
-            const consulta = obrastotal.filter(row => row.folio_obra.startsWith(e.target.value))
-            console.log(consulta);
-            if(consulta.length === 0){
-                guardarErrorConsulta(true)
-                return
-            }
-            guardarErrorConsulta(false)
-
-            const obrasCard = consulta.map(obra => (
-                {
-                  folioObra: obra.folio_obra,
-                  nombreObra: obra.nombre_obra                    
-                }
-            ))
-            guardarRows(obrasCard)
-            
-            
-        }
-        
-    }
-    const handleChangeRadio = e => {
-        console.log(e.target.value);
-    }
     
     
     
@@ -77,38 +44,16 @@ const Obras = ( { titulo, siguientecomponente,paginaactual,guardarPaginaActual, 
                     </Typography>
                     <br/>
                     
-                    <Grid
-                       container
-                       spacing={0}
-                       direction="column"
-                       alignItems="center"
-                       justify="center"
-                    >
-                        <FormControl component="fieldset">
-                            <FormLabel component="legend">Folio:</FormLabel>
-                            <RadioGroup row aria-label="position" name="position" defaultValue="top">
-                                <FormControlLabel
-                                    value="obra"
-                                    control={<Radio  onChange={handleChangeRadio} color="primary" />}
-                                    label="Obra"
-                                    labelPlacement="obra"
-                                />
-                                <FormControlLabel
-                                    value="cotizacion"
-                                    control={<Radio  onChange={handleChangeRadio} color="primary" />}
-                                    label="Cotizacion"
-                                    labelPlacement="cotizacion"
-                                />                                                        
-                            </RadioGroup>
-                        </FormControl>
-                        <TextField                                    
-                            id="folio"
-                            name="folio"
-                            label="folio"
-                            value={folio}
-                            onChange={handleChange}                                                             
-                        />
-                    </Grid>
+                    
+                    <BuscadorObra
+                        folio={folio}
+                        obrastotal={obrastotal}
+                        guardarRows={guardarRows}
+                        guardarErrorConsulta={guardarErrorConsulta}
+                        bandObrasCotizadas={bandObrasCotizadas}
+                        tipobusqueda={tipobusqueda}
+                        guardarTipoBusqueda={guardarTipoBusqueda}
+                    />
                     <br/>
                     {
                         errorconsulta
@@ -118,6 +63,7 @@ const Obras = ( { titulo, siguientecomponente,paginaactual,guardarPaginaActual, 
                         <CardObra
                             rows={rows}
                             obrastotal={obrastotal}
+                            obrascotizadas={obrascotizadas}
                             guardarObra={guardarObra}
                             siguientecomponente={siguientecomponente}
                             totalpaginas={totalpaginas}
@@ -128,6 +74,8 @@ const Obras = ( { titulo, siguientecomponente,paginaactual,guardarPaginaActual, 
                             page={page}
                             setPage={setPage}
                             cantidadcards={cantidadcards}
+                            bandObrasCotizadas={bandObrasCotizadas}
+                            seleccionpor={seleccionpor}
                             //guardarComponente={guardarComponente}
                             //componente={componente}
                         />

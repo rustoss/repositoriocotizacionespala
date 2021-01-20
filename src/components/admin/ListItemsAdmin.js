@@ -1,22 +1,24 @@
 import { useContext } from 'react'
 import { ListItem, List, ListItemIcon, ListItemText, } from '@material-ui/core/';
-import { Dashboard, ShoppingCart, People } from '@material-ui/icons';
+import { Person, ListAlt, Add } from '@material-ui/icons';
 import {ComponenteContext} from '../../context/ComponenteContext'
-import {guardarLS} from '../../funciones/guardarLS'
+import {guardarLS} from '../../libs/guardarLS'
 
 
-const ListItemsAdmin = ( {guardarPaginaActual } ) => {
+const ListItemsAdmin = ( { guardarPaginaActual, setPage, guardarRowsObrasTotales, guardarRowsObrasCotizadas, obrastotales, guardarTipoBusqueda,  } ) => {
 
   const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
-  const { nivel_acceso, numero_ventana, numero_componente } = componentecontx
+  const { nivel_acceso, numero_ventana } = componentecontx
 
   const handleListItemClick = () => {
     guardarLS(nivel_acceso, 1, numero_ventana)
     guardarPaginaActual(0)
+    
     guardarComponenteContx({
       ...componentecontx,
       numero_componente: 1
     })
+    //guardarTipoBusqueda('Buscar por Folio Obra')
   }
   
   const handleListItemClick2 = () => {    
@@ -26,15 +28,27 @@ const ListItemsAdmin = ( {guardarPaginaActual } ) => {
       ...componentecontx,
       numero_componente: 0
     })
+    //guardarTipoBusqueda('Buscar por Folio Obra')
+    
   }
 
   const handleListItemClick3 = () => {
+    const obras = obrastotales.map(obra => (
+      {
+        folioObra: obra.folio_obra,
+        nombreObra: obra.nombre_obra                    
+      }
+    ))
+    guardarRowsObrasTotales(obras)
     guardarLS(nivel_acceso, 2, numero_ventana)
     guardarPaginaActual(0)
     guardarComponenteContx({
       ...componentecontx,
       numero_componente: 2
     })
+    setPage(1)
+    guardarTipoBusqueda('Buscar por Folio Obra')
+    guardarRowsObrasCotizadas([])
   }
 
   return (
@@ -45,7 +59,7 @@ const ListItemsAdmin = ( {guardarPaginaActual } ) => {
         onClick={handleListItemClick}
       >
         <ListItemIcon>
-          <Dashboard />
+          <Person />
         </ListItemIcon>
         <ListItemText primary="Perfil" />
       </ListItem>
@@ -54,7 +68,7 @@ const ListItemsAdmin = ( {guardarPaginaActual } ) => {
         onClick={handleListItemClick2}
       >
         <ListItemIcon>
-          <ShoppingCart />
+          <Add />
         </ListItemIcon>
         <ListItemText primary="Crear Obra" />
       </ListItem>
@@ -63,7 +77,7 @@ const ListItemsAdmin = ( {guardarPaginaActual } ) => {
         onClick={handleListItemClick3}
       >
         <ListItemIcon>
-          <People />
+          <ListAlt />
         </ListItemIcon>
         <ListItemText primary="Obras Creadas" />
       </ListItem>    

@@ -1,8 +1,9 @@
 import React from 'react';
+import DatosPersonales from './DatosPersonales'
 
 const PerfilProv = ({correo}) => {
-    return ( 
-        <h1>Usuario: {correo}</h1>
+    return (         
+        <DatosPersonales/>
     );
 }
  

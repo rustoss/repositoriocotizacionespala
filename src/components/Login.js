@@ -1,13 +1,13 @@
 import { useState, useContext } from 'react';
-import {Avatar, Button, CssBaseline, TextField, FormControlLabel} from '@material-ui/core';
-import {Checkbox, Link, Grid, Box, Typography, makeStyles, Container} from '@material-ui/core';
+import {Avatar, Button, CssBaseline, TextField} from '@material-ui/core';
+import { Link, Grid, Box, Typography, makeStyles, Container} from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import Error from './Error'
 import Copyright from './Copyright'
 import {ComponenteContext} from '../context/ComponenteContext'
-import {guardarLS} from '../funciones/guardarLS'
+import {guardarLS} from '../libs/guardarLS'
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Login = ({ }) => {
+const Login = () => {
 
     const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)    
 

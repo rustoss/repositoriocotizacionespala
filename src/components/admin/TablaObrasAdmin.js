@@ -8,6 +8,22 @@ const useStyles = makeStyles({
   container: {
     maxHeight: 440,
   },
+  btn:{
+    background: 'linear-gradient(80deg, #212121 40%, #616161 100%)',
+    border: 3,
+    borderRadius: 6,
+    color: 'white',
+    height: 30,
+    width: '50%',
+    cursor: 'pointer',
+
+    '&:hover': {
+      background: 'linear-gradient(80deg, #ab000d 40%, #c4001d 100%)',
+      color: 'white',
+      fontWeight: '700',
+      fontSize: '15px'
+    },
+  },
 });
 
 export default function TablaObrasAdmin({ rows, guardarRows }) {
@@ -117,6 +133,7 @@ export default function TablaObrasAdmin({ rows, guardarRows }) {
                           variant="contained"
                           color="primary"
                           onClick={eliminarDato}
+                          className={classes.btn}
                         /> : value }
                       </TableCell>
                     );

@@ -1,13 +1,13 @@
 import { useContext } from 'react'
 import { ListItem, List, ListItemIcon, ListItemText } from '@material-ui/core/';
-import { Dashboard, ShoppingCart, People } from '@material-ui/icons';
+import { ListAlt, Person, Add } from '@material-ui/icons';
 import {ComponenteContext} from '../../context/ComponenteContext'
-import {guardarLS} from '../../funciones/guardarLS'
+import {guardarLS} from '../../libs/guardarLS'
 
-const ListItemsProv = ( { guardarPaginaActual, obrasdisponibles, guardarRowsObrasDisponibles, obrascotizadas, guardarRowsObrasCotizadas, setPage} ) => {
+const ListItemsProv = ( { guardarPaginaActual, obrasdisponibles, guardarRowsObrasDisponibles, obrascotizadas, guardarRowsObrasCotizadas, setPage, guardarTipoBusqueda} ) => {
 
   const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
-  const { nivel_acceso, numero_ventana, numero_componente } = componentecontx
+  const { nivel_acceso, numero_ventana } = componentecontx
   
   const handleClickPerfil = () => {   
     
@@ -18,6 +18,7 @@ const ListItemsProv = ( { guardarPaginaActual, obrasdisponibles, guardarRowsObra
       ...componentecontx,
       numero_componente: 1
     })
+    //guardarTipoBusqueda('Buscar por Folio Obra')
   }
   
   const handleClickObrasDisp = () => {    
@@ -35,6 +36,7 @@ const ListItemsProv = ( { guardarPaginaActual, obrasdisponibles, guardarRowsObra
       ...componentecontx,
       numero_componente: 0
     })
+    guardarTipoBusqueda('Buscar por Folio Obra')
   }
 
   const handleClickObrasCoti = () => {
@@ -53,6 +55,7 @@ const ListItemsProv = ( { guardarPaginaActual, obrasdisponibles, guardarRowsObra
       ...componentecontx,
       numero_componente: 2
     })
+    guardarTipoBusqueda('Buscar por Folio Obra')
   }
 
   return (
@@ -63,7 +66,7 @@ const ListItemsProv = ( { guardarPaginaActual, obrasdisponibles, guardarRowsObra
         onClick={handleClickPerfil}
       >
         <ListItemIcon>
-          <Dashboard />
+          <Person />
         </ListItemIcon>
         <ListItemText primary="Perfil" />
       </ListItem>
@@ -72,7 +75,7 @@ const ListItemsProv = ( { guardarPaginaActual, obrasdisponibles, guardarRowsObra
         onClick={handleClickObrasDisp}
       >
         <ListItemIcon>
-          <ShoppingCart />
+          <Add />
         </ListItemIcon>
         <ListItemText primary="Obras Disponibles" />
       </ListItem>
@@ -81,7 +84,7 @@ const ListItemsProv = ( { guardarPaginaActual, obrasdisponibles, guardarRowsObra
         onClick={handleClickObrasCoti}
       >
         <ListItemIcon>
-          <People />
+          <ListAlt />
         </ListItemIcon>
         <ListItemText primary="Obras Cotizadas" />
       </ListItem>      
