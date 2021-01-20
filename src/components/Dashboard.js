@@ -11,6 +11,7 @@ import ListItemsAdmin from './admin/ListItemsAdmin';
 import PerfilAdmin from './admin/PerfilAdmin'
 import CrearObraAdmin from './admin/CrearObraAdmin'
 //import ObrasCreadasAdmin from './admin/ObrasCreadasAdmin'
+import ObrasCotizadasAdmin from './admin/ObrasCotizadasAdmin'
 import DetalleObraAdmin from './admin/DetalleObraAdmin'
 
 import ListItemsProv from './prov/ListItemsProv'
@@ -228,7 +229,7 @@ export default function Dashboard() {
         seleccionpor={'obra'}
       />
     }else if (nivel_acceso === 0 && numero_componente === 3){
-      return <DetalleObraAdmin
+      return <ObrasCotizadasAdmin
         obra={obra}
         guardarObra={guardarObra}
         rowsobrascotizadas={rowsobrascotizadas}      
@@ -247,7 +248,10 @@ export default function Dashboard() {
         guardarTipoBusqueda={guardarTipoBusqueda}
       />
     }else if (nivel_acceso === 0 && numero_componente === 4){
-      return `La Obra es: ${obra.folio_obra} \nLa cotizacion es: ${obra.folio_cotizacion}`
+      return <DetalleObraAdmin
+        obra={obra}
+      />
+      //return `La Obra es: ${obra.folio_obra} \nLa cotizacion es: ${obra.folio_cotizacion}`
     }else{
       return 'error 400'
     }

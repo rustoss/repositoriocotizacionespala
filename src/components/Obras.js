@@ -47,6 +47,7 @@ const Obras = ( { titulo, siguientecomponente,paginaactual,guardarPaginaActual, 
                     
                     <BuscadorObra
                         folio={folio}
+                        guardarFolio={guardarFolio}
                         obrastotal={obrastotal}
                         guardarRows={guardarRows}
                         guardarErrorConsulta={guardarErrorConsulta}

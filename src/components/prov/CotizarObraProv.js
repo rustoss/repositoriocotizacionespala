@@ -45,6 +45,12 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
 
     const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
 
+    var fechaActual = new Date()
+    var mes = fechaActual.getMonth();
+    var dia = fechaActual.getDate()+1;
+    var anio = fechaActual.getFullYear();
+    const fecha = `${anio}-${mes+1}-${dia}`
+    console.log(fecha);
     // Creacion de states
     const [ error, guardarError ] = useState({
         bandError: false,
@@ -62,6 +68,9 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
         requeridos: 0,
         preciounitario: '',
         anotaciones: '',
+        vigencia: fecha,
+        sostenimiento: '',
+        condiciones: '',
         eliminar: ''
     })
     const [ rows, guardarRows ] = useState([])
@@ -74,7 +83,8 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
     const { bandError, mensajeError } = error
 
 
-    useEffect(() => {        
+    useEffect(() => {     
+        
         const consultarAPI = async () => {                
             const res = [...new Set(obra.materiales_obra.map(e => (e.categoria)))]            
             guardarCategorias(res)
@@ -205,9 +215,7 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
                     </Typography>
                     <br/>
                     <br/>
-                    { bandError ? <Error mensaje={mensajeError}/> : null }
-                    <br/>  
-                    <br/>
+                    { bandError ? <Error mensaje={mensajeError}/> : null }                    
                     <FormularioCotizarObraProv
                         datos={datos}
                         guardarDatos={guardarDatos}

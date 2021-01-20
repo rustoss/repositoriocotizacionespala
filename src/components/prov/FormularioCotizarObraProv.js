@@ -4,9 +4,10 @@ import { Add } from '@material-ui/icons/'
 
 const FormularioCotizarObraProv = ({ guardarBandBotonRegistrar, guardarRows, rows, guardarError, categorias, subcategorias, productos, datos, guardarDatos, classes}) => {
 
-    const { folioItem, categoria, subcategoria, producto, unidad, preciounitario, requeridos, anotaciones } = datos
+    const { folioItem, categoria, subcategoria, producto, unidad, preciounitario, requeridos, anotaciones, vigencia, sostenimiento, condiciones } = datos
 
     const handleChange = e => {
+        console.log(e.target.value)
                
         guardarDatos({
             ...datos,
@@ -17,7 +18,7 @@ const FormularioCotizarObraProv = ({ guardarBandBotonRegistrar, guardarRows, row
     const submitTabla = e => {
         e.preventDefault()
 
-        if (producto.trim() === '' || preciounitario.trim() === '' || anotaciones.trim() === '' || unidad.trim() === ''){
+        if (producto.trim() === '' || preciounitario.trim() === '' || anotaciones.trim() === '' || unidad.trim() === '' || sostenimiento.trim() === '' || condiciones.trim() === ''){
             guardarError({ bandError: true, mensajeError: 'Todos los campos son obligadorios' })
             return
         }
@@ -40,6 +41,9 @@ const FormularioCotizarObraProv = ({ guardarBandBotonRegistrar, guardarRows, row
             unidad: '',
             requeridos: 0,
             anotaciones: '',
+            vigencia: '',
+            sostenimiento: '',
+            condiciones: '',
             eliminar: ''
         })
         guardarBandBotonRegistrar(false)
@@ -48,6 +52,44 @@ const FormularioCotizarObraProv = ({ guardarBandBotonRegistrar, guardarRows, row
         <form
             onSubmit={submitTabla}
         >
+            <Grid container spacing={1}>
+                <Grid item xs={12} md={3}>
+                    <TextField
+                        type="date"
+                        id="vigencia"
+                        name="vigencia"
+                        label="Fecha Vigencia"
+                        defaultValue={vigencia}
+                        //value={vigencia}
+                        onChange={handleChange}
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12} md={3}>
+                    <TextField
+                        id="sostenimiento"
+                        name="sostenimiento"
+                        label="Días de sostenimiento"                        
+                        value={sostenimiento}
+                        onChange={handleChange}
+                        fullWidth
+                    />
+                </Grid>
+                <Grid item xs={12} md={3}>
+                    <TextField                                    
+                        id="condiciones"
+                        name="condiciones"
+                        label="Condiciones"                        
+                        value={condiciones}
+                        onChange={handleChange}
+                        fullWidth                                    
+                    />
+                </Grid>
+            </Grid>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
             <Grid container spacing={3}>                                
                 <Grid item xs={12} md={3}>                        
                     <InputLabel id="categoria">Categoría</InputLabel>

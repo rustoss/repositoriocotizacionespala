@@ -1,6 +1,5 @@
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import { withStyles } from '@material-ui/core/styles'
-import {Switch, Grid, TextField} from '@material-ui/core/'
+import {Switch, Grid, TextField, withStyles} from '@material-ui/core/'
 
 
 const SwitchPurple = withStyles({
@@ -17,44 +16,14 @@ const SwitchPurple = withStyles({
 	track: {},
 })(Switch)
 
-const BuscadorObra = ({ folio, obrastotal, guardarRows, guardarErrorConsulta, bandObrasCotizadas, tipobusqueda, guardarTipoBusqueda }) => {
+const BuscadorObra = ({ folio, guardarFolio, obrastotal, guardarRows, guardarErrorConsulta, bandObrasCotizadas, tipobusqueda, guardarTipoBusqueda }) => {
         
-
-	const handleChange = e => {
-		e.target.checked === false ? guardarTipoBusqueda('Buscar por Folio Obra') : guardarTipoBusqueda('Buscar por Folio Cotizacion')
-    }
-    
-    const handleChangeFolio = e => {
-        
-        if(e.target.value.trim() === ""){            
-            //let obrasCard
-            guardarErrorConsulta(false)
-            if (bandObrasCotizadas === false){        
-                const obrasCard = obrastotal.map(obra => (
-                    {
-                      folioObra: obra.folio_obra,
-                      nombreObra: obra.nombre_obra                    
-                    }
-                ))                
-                guardarRows(obrasCard)
+    const consulta_ = (folio_, band) => {
+        let consulta = []
+            if(band === 'Buscar por Folio Obra'){                
+                consulta = obrastotal.filter(row => row.folio_obra.startsWith(folio_))
             }else{                
-                const obrasCard = obrastotal.map(obra => (
-                    {
-                      folioObra: obra.folio_obra,
-                      folioCotizacion: obra.folio_cotizacion,
-                      nombreObra: obra.nombre_obra
-                    }
-                ))                
-                guardarRows(obrasCard)
-            }
-            //console.log(obrasCard);
-            
-        }else{
-            let consulta = []
-            if(tipobusqueda === 'Buscar por Folio Obra'){                
-                consulta = obrastotal.filter(row => row.folio_obra.startsWith(e.target.value))
-            }else{                
-                consulta = obrastotal.filter(row => row.folio_cotizacion.startsWith(e.target.value))
+                consulta = obrastotal.filter(row => row.folio_cotizacion.startsWith(folio_))
             }
             
             if(consulta.length === 0){
@@ -64,7 +33,6 @@ const BuscadorObra = ({ folio, obrastotal, guardarRows, guardarErrorConsulta, ba
             guardarErrorConsulta(false)
             let obrasCard
             if(bandObrasCotizadas === false){
-
                 obrasCard = consulta.map(obra => (
                     {
                     folioObra: obra.folio_obra,
@@ -82,8 +50,41 @@ const BuscadorObra = ({ folio, obrastotal, guardarRows, guardarErrorConsulta, ba
             }
             guardarRows(obrasCard)
             
-            
+    }
+	const handleChange = e => {
+        e.target.checked === false ? guardarTipoBusqueda('Buscar por Folio Obra') : guardarTipoBusqueda('Buscar por Folio Cotizacion')
+        const band = e.target.checked === false ? 'Buscar por Folio Obra' : 'Buscar por Folio Cotizacion'
+        consulta_(folio, band)
+    }
+    
+    const handleChangeFolio = e => {
+        
+        if(e.target.value.trim() === ""){            
+            //let obrasCard
+            guardarErrorConsulta(false)
+            if (bandObrasCotizadas === false){        
+                const obrasCard = obrastotal.map(obra => (
+                    {
+                      folioObra: obra.folio_obra,
+                      nombreObra: obra.nombre_obra                    
+                    }
+                ))                
+                guardarRows(obrasCard)
+            }else{
+                const obrasCard = obrastotal.map(obra => (
+                    {
+                      folioObra: obra.folio_obra,
+                      folioCotizacion: obra.folio_cotizacion,
+                      nombreObra: obra.nombre_obra
+                    }
+                ))
+                guardarRows(obrasCard)
+            }
+            //console.log(obrasCard);
+        }else{
+            consulta_(e.target.value, tipobusqueda)                        
         }
+        guardarFolio(e.target.value)
         
     }
 

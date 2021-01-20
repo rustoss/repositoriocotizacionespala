@@ -3,7 +3,9 @@ import DatosPersonales from './DatosPersonales'
 
 const PerfilProv = ({correo}) => {
     return (         
-        <DatosPersonales/>
+        <DatosPersonales
+            correo={correo}
+        />
     );
 }
  

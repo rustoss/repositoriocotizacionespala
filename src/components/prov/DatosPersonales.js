@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function DatosPersonales() {
+export default function DatosPersonales({correo}) {
   const classes = useStyles();
 
   return (
@@ -45,6 +45,7 @@ export default function DatosPersonales() {
             id="correo"
             name="correo"
             label="Correo"
+            value={correo}
             fullWidth
           />
         </Grid>
