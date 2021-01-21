@@ -55,7 +55,7 @@ export default function DatosPersonales({
 
   const inputPropsTelefonoFijo = () =>{
     const { error } = schema.validate({telefono: telefonoFijo})
-    console.log(error);
+
     if ( error ){
       guardarErroresDatos({
         ...erroresdatos,
@@ -71,7 +71,7 @@ export default function DatosPersonales({
 
   const inputPropsTelefonoMovil = () =>{
     const { error } = schema.validate({telefono: telefonoMovil})
-    console.log(error);
+
     if ( error ){
       guardarErroresDatos({
         ...erroresdatos,

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Fragment } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
@@ -29,12 +29,16 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function DatosPersonales({correo}) {
+export default function DatosPersonales({perfil}) {
   const classes = useStyles();
+
+  const { correo_prov, nombre_contacto_prov, telefono_fijo_prov, telefono_movil_prov } = perfil  
+
+  
 
   return (
     <div className={classes.paper}>
-    <React.Fragment>
+    <Fragment>
       <Typography variant="h6" gutterBottom className={classes.rb1}>
         DATOS PERSONALES
       </Typography>
@@ -42,19 +46,23 @@ export default function DatosPersonales({correo}) {
         <Grid item xs={12} sm={6}>
           <TextField
             disabled = {true}
-            id="correo"
-            name="correo"
+            id="correo_prov"
+            name="correo_prov"
             label="Correo"
-            value={correo}
+            value={''+correo_prov}
             fullWidth
+            InputProps={{
+              readOnly: true,
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
             disabled = {true}
-            id="nombreContact"
-            name="nombreContact"
+            id="nombre_contacto_prov"
+            name="nombre_contacto_prov"
             label="Nombre contacto"
+            value={''+nombre_contacto_prov}
             fullWidth
             
           />
@@ -62,9 +70,10 @@ export default function DatosPersonales({correo}) {
         <Grid item xs={12}  sm={4}>
           <TextField
             disabled = {true}
-            id="tel"
-            name="telefono"
+            id="telefono_fijo_prov"
+            name="telefono_fijo_prov"
             label="Telefono fijo"
+            value={''+telefono_fijo_prov}
             fullWidth
            
           />
@@ -72,18 +81,18 @@ export default function DatosPersonales({correo}) {
         <Grid item xs={12} sm={4}>
           <TextField
             disabled = {true}
-            id="cel"
-            name="celular"
+            id="telefono_movil_prov"
+            name="telefono_movil_prov"
             label="Telefono celular"
-            fullWidth
-           
+            value={''+telefono_movil_prov}
+            fullWidth           
           />
         </Grid>
         
       </Grid>
       
 
-    </React.Fragment>
+    </Fragment>
     </div>
   );
 }

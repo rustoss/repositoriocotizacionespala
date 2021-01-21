@@ -151,8 +151,8 @@ export default function Dashboard() {
   const [ page, setPage ] = useState(1);    
   const [ cantidadcards, guardarCantidadCards ] = useState(12)
   const [ paginafinal, guardarPaginaFinal ] = useState(cantidadcards)
-  const [tipobusqueda, guardarTipoBusqueda] = useState('Buscar por Folio Obra')
-
+  const [ tipobusqueda, guardarTipoBusqueda ] = useState('Buscar por Folio Obra')
+  const [ perfil, guardarPerfil ] = useState({})
 
   useEffect(() => {
     
@@ -170,6 +170,7 @@ export default function Dashboard() {
       }else if (nivel_acceso === 1){
         const respObrasDisp = await axios.get('https://apicotizacion.herokuapp.com/api/obras/vigentes')
         const respObrasCoti = await axios.get(`https://apicotizacion.herokuapp.com/api/cotizaciones/cotizadas/${decoded.correo}`)
+        const respPerfil = await axios.get(`https://apicotizacion.herokuapp.com/api/proveedores/datos_personales/${decoded.correo}`)
         const obrasDisp = respObrasDisp.data.Obras.map(obra => (
           {
             folioObra: obra.folio_obra,
@@ -187,6 +188,7 @@ export default function Dashboard() {
         guardarObrasCotizadas(respObrasCoti.data.Obras)
         guardarRowsObrasDisponibles(obrasDisp)
         guardarRowsObrasCotizadas(obrasCoti)
+        guardarPerfil(respPerfil.data.datos_personales)
       }
     }
     consultarAPI()
@@ -297,7 +299,7 @@ export default function Dashboard() {
       />
     }else if(nivel_acceso === 1 && numero_componente === 1){
       return <PerfilProv
-        correo={decoded.correo}
+        perfil={perfil}
       />
     }else if(nivel_acceso === 1 && numero_componente === 2){
       //return <ObrasCotizadasProv/>      
@@ -420,8 +422,8 @@ export default function Dashboard() {
         }}
         open={open}
       >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
+        <div className={classes.toolbarIcon}>          
+          <IconButton onClick={handleDrawerClose}>            
             <ChevronLeft />
           </IconButton>
         </div>

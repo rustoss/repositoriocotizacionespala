@@ -1,10 +1,10 @@
 import React from 'react';
 import DatosPersonales from './DatosPersonales'
 
-const PerfilProv = ({correo}) => {
+const PerfilProv = ({perfil}) => {
     return (         
         <DatosPersonales
-            correo={correo}
+            perfil={perfil}
         />
     );
 }

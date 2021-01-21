@@ -9,7 +9,7 @@ function App() {
   const { componentecontx } = useContext(ComponenteContext)
 
   const { numero_ventana } = componentecontx  
-  //console.log(componentecontx);
+  
 
   //const [ numerocomponente, guardarNumeroComponente ] = useState(0)
   //const [ nivelacceso, guardarNivelAcceso ] = useState(0)

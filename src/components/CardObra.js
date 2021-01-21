@@ -98,7 +98,7 @@ const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas, pagin
             {/* End hero unit */}
             <Grid container spacing={2}>
                 {rows.slice(paginaactual, paginafinal).map((row) => (
-                <Grid item key={row.folioObra} xs={12} sm={6} md={4}>
+                <Grid item key={bandObrasCotizadas ? row.folioCotizacion:row.folioObra} xs={12} sm={6} md={4}>
                     <Card className={classes.card}>                  
                     <CardContent className={classes.cardContent}>
                         <Typography gutterBottom variant="h5" component="h2">

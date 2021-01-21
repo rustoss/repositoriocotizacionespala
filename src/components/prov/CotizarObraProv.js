@@ -44,13 +44,7 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
     const classes = useStyles();
 
     const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)
-
-    var fechaActual = new Date()
-    var mes = fechaActual.getMonth();
-    var dia = fechaActual.getDate()+1;
-    var anio = fechaActual.getFullYear();
-    const fecha = `${anio}-${mes+1}-${dia}`
-    console.log(fecha);
+                
     // Creacion de states
     const [ error, guardarError ] = useState({
         bandError: false,
@@ -68,8 +62,7 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
         requeridos: 0,
         preciounitario: '',
         anotaciones: '',
-        vigencia: fecha,
-        sostenimiento: '',
+        sostenimiento: 1,
         condiciones: '',
         eliminar: ''
     })
@@ -79,7 +72,7 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
     const [ bandbotonregistrar, guardarBandBotonRegistrar ] = useState(true)
     
     // Destructuring de los state
-    const { categoria, subcategoria, producto } = datos
+    const { categoria, subcategoria, producto, sostenimiento, condiciones } = datos
     const { bandError, mensajeError } = error
 
 
@@ -139,8 +132,6 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
     useEffect(() => {
         try{
             const resultado = obra.materiales_obra.filter(e => e.producto === producto)
-
-            console.log(resultado);
                 
             resultado.map(e => (guardarDatos({
                 ...datos,
@@ -155,19 +146,22 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
     useEffect(() => {
         const consultarAPI = async () => {
             try{
+                
+
                 let materiales = rows
                 materiales.map(material => delete material.eliminar);
 
 
                 const resultado = JSON.parse(localStorage.getItem('jwt'))
-                const decoded = jwt_decode(resultado);
-                console.log(decoded);
+                const decoded = jwt_decode(resultado);        
                 
                 let resultadoAPI = await Axios.post('https://apicotizacion.herokuapp.com/api/cotizaciones', {                    
                     "nombre_obra": obra.nombre_obra,
                     "folio_obra": obra.folio_obra,
-                    "folio_cotizacion": Math.floor(Math.random() * 100) + 1,
+                    "folio_cotizacion": Math.floor(Math.random() * 10000) + 1,
                     "correo_prov": decoded.correo,
+                    'dias_sostenimiento_propuesta': sostenimiento,
+                    'condiciones_comerciales': condiciones,
                     "materiales_cotizacion": materiales                    
                 })
                 //guardarNumeroComponenteDashboardProv(2)
@@ -202,6 +196,15 @@ const CotizarObraProv = ( { obra, guardarActualizarCards } ) => {
     }, [banddatosapi])
 
     const registrar = () => {
+        if(condiciones.trim() === ''){
+            guardarError({ bandError: true, mensajeError: 'Todos los campos son obligadorios' })
+            return
+        }
+        if(sostenimiento < 1){
+            guardarError({ bandError: true, mensajeError: 'Los días de sostenimiento deben ser mayor a 0' })
+            return
+        }
+        guardarError({ bandError: false, mensajeError: '' })
         setOpenModal(true)
     }
 

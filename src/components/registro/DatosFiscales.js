@@ -89,7 +89,7 @@ export default function DatosFiscales({
     }
     const inputPropsEstado = () =>{
         const { error } = schema.validate({letras: estado})
-        console.log(error);
+
         if ( error ){
             guardarErroresDatos({
                 ...erroresdatos,

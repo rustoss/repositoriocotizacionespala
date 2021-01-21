@@ -15,7 +15,6 @@ const ObrasCotizadasAdmin = ({obra,paginaactual,guardarPaginaActual, paginafinal
                   nombreObra: obra.nombre_obra,                   
                 }
               ))
-              //console.log(respObrasCoti);
               guardarObrasCotizadas(respObrasCoti.data.Cotizacion)              
               guardarRowsObrasCotizadas(obrasCoti)
         }

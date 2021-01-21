@@ -31,9 +31,7 @@ const Obras = ( { titulo, siguientecomponente,paginaactual,guardarPaginaActual, 
     const [ folio, guardarFolio ] = useState()
     const [ errorconsulta, guardarErrorConsulta ] = useState(false)
     
-    
-    
-    
+
     return (
         <Fragment>
             <CssBaseline />

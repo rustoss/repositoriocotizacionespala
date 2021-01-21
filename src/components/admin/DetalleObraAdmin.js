@@ -105,8 +105,9 @@ export default function DetalleObraAdmin({ obra }) {
  
     useEffect(() => {
         const objeto = {}
-        const h = obra.materiales_cotizacion.map(e => (objeto[e.folioItem] = false))
+        obra.materiales_cotizacion.map(e => (objeto[e.folioItem] = false))
         guardarChecks(objeto)
+        //eslint-disable-next-line
     }, [])
 
   

@@ -21,14 +21,15 @@ const ListItemsProv = ( { guardarPaginaActual, obrasdisponibles, guardarRowsObra
     //guardarTipoBusqueda('Buscar por Folio Obra')
   }
   
-  const handleClickObrasDisp = () => {    
+  const handleClickObrasDisp = () => {   
+     
     const obras = obrasdisponibles.map(obra => (
       {
         folioObra: obra.folio_obra,
         nombreObra: obra.nombre_obra                    
       }
     ))
-    guardarRowsObrasDisponibles(obras)
+    
     guardarLS( nivel_acceso, 0, numero_ventana)
     guardarPaginaActual(0)
     setPage(1)
@@ -37,6 +38,7 @@ const ListItemsProv = ( { guardarPaginaActual, obrasdisponibles, guardarRowsObra
       numero_componente: 0
     })
     guardarTipoBusqueda('Buscar por Folio Obra')
+    guardarRowsObrasDisponibles(obras)    
   }
 
   const handleClickObrasCoti = () => {
@@ -47,7 +49,7 @@ const ListItemsProv = ( { guardarPaginaActual, obrasdisponibles, guardarRowsObra
         nombreObra: obra.nombre_obra                    
       }
     ))
-    guardarRowsObrasCotizadas(obras)
+      
     guardarLS( nivel_acceso, 2, numero_ventana)
     guardarPaginaActual(0)
     setPage(1)
@@ -56,6 +58,7 @@ const ListItemsProv = ( { guardarPaginaActual, obrasdisponibles, guardarRowsObra
       numero_componente: 2
     })
     guardarTipoBusqueda('Buscar por Folio Obra')
+    guardarRowsObrasCotizadas(obras)  
   }
 
   return (

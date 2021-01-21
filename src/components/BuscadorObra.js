@@ -80,7 +80,7 @@ const BuscadorObra = ({ folio, guardarFolio, obrastotal, guardarRows, guardarErr
                 ))
                 guardarRows(obrasCard)
             }
-            //console.log(obrasCard);
+           
         }else{
             consulta_(e.target.value, tipobusqueda)                        
         }

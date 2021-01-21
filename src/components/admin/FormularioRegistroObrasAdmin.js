@@ -8,10 +8,14 @@ const FormularioRegistroObras = ({ datos, guardarDatos, guardarError, rows, guar
     const submitTabla = e => {
         e.preventDefault()
         
-        if (folioItem.trim() === '' || unidad.trim() === '' || requeridos === 0 || anotaciones.trim() === ''){
+        if (folioItem.trim() === '' || unidad.trim() === '' || anotaciones.trim() === ''){
             guardarError({ bandError: true, mensajeError: 'Todos los campos son obligadorios' })
             return
-        }        
+        }    
+        if (requeridos < 1){
+            guardarError({ bandError: true, mensajeError: 'EL número requeridos deben ser mayor a 1' })
+            return
+        }      
 
         const result = rows.find(row => row.folioItem === folioItem)        
 

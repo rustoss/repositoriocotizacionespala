@@ -156,15 +156,14 @@ export default function Checkout() {
             "razon_social_prov": razonSocial,
             "password_prov": password
           })
-          console.log('1111111111111');
+
           ///guardarLS(null, null, null)
-          console.log('222222');
+
           guardarComponenteContx({
             numero_componente: null,
             numero_ventana: 0,
             nivel_acceso: null,
           })
-          console.log('3333333');
           /*
 
 

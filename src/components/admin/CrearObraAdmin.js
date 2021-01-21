@@ -138,7 +138,7 @@ const CrearObraAdmin = ( { guardarActualizarCards } ) => {
                     "nombre_obra": nombreObra,
                     "direccion_obra": direccionObra,
                     "dependencia_obra": dependenciaObra,
-                    "folio_obra": Math.floor(Math.random() * 100) + 1,
+                    "folio_obra": Math.floor(Math.random() * 10000) + 1,
                     "creador_obra": "quien sabe",
                     "materiales_obra": materiales
                 }

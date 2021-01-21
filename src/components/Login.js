@@ -31,9 +31,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = () => {
 
-    const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)    
-
-    //console.log(`nivel acceso: ${nivel_acceso} y numero ventana: ${numero_ventana}`);
+    const { componentecontx, guardarComponenteContx } = useContext(ComponenteContext)        
 
     const [ datoslogeo, guardarDatosLogeo] = useState({
         email: '',
@@ -75,7 +73,7 @@ const Login = () => {
            
             localStorage.setItem('jwt', JSON.stringify(consulta.data.jwToken))
             let nivelAcceso = 1
-            console.log(decoded);
+      
             
             if (decoded.nivel_acceso === 0){
                 nivelAcceso = 0
