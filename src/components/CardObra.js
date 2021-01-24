@@ -110,7 +110,7 @@ const CardObra = ({siguientecomponente, rows, cantidadcards, totalpaginas, pagin
                           <Typography gutterBottom variant="h6" component="h2">
                             Folio Cotizacion: {row.folioCotizacion}
                           </Typography>
-                          : 
+                          :
                           null
                         }
                         <Typography>
